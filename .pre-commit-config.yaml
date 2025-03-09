@@ -1,5 +1,9 @@
 default_language_version:
     python: python3.11
+
+exclude: |
+    ^\.pre-commit-config\.yaml$
+
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -35,6 +39,20 @@ repos:
     hooks:
       - id: isort
         name: isort (python)
+
+-   repo: local
+    shell: bash
+    hooks:
+    -   id: auto-commit
+        name: Auto commit pre-commit changes
+        entry: >
+          /bin/bash -c "
+          git add . &&
+          git commit -m 'chore: apply pre-commit fixes' || true
+          "
+        language: system
+        pass_filenames: false
+
 ci:
     autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks
     autoupdate_commit_msg: ⬆ [pre-commit.ci] pre-commit autoupdate
