@@ -40,14 +40,6 @@ repos:
       - id: isort
         name: isort (python)
 
--   repo: local
-    hooks:
-    -   id: auto-commit
-        name: Auto commit pre-commit changes
-        entry: python -c "import os, subprocess; shell = 'cmd /c' if os.name == 'nt' else 'bash -c'; commit_status = subprocess.run(shell + ' \"git add . && git commit --amend --no-edit --no-verify\"', shell=True).returncode; exit(1 if commit_status == 0 else 0)"
-        language: system
-        pass_filenames: false
-
 ci:
     autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks
     autoupdate_commit_msg: ⬆ [pre-commit.ci] pre-commit autoupdate
