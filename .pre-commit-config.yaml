@@ -45,7 +45,7 @@ repos:
     -   id: auto-commit
         name: Auto commit pre-commit changes
         entry: >
-          python -c "import os; shell = 'cmd /c' if os.name == 'nt' else 'bash -c'; os.system(shell + ' \"git add . && git commit --no-verify -m \\\"chore: Apply pre-commit fixes\\\" || exit 0\"')"
+          python -c "import os; shell = 'cmd /c' if os.name == 'nt' else 'bash -c'; os.system(shell + ' \"git add . && git commit --no-verify -m \\\"chore : Apply pre-commit fixes\\\" || exit 0\"'); os.system(shell + ' \"pre-commit run --all-files\"')"
         language: system
         pass_filenames: false
 
