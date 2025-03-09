@@ -4,7 +4,7 @@ import uvicorn
 def main():
     uvicorn.run(
         app="app.server:app",
-        host="0.0.0.0",
+        host="localhost",
         port=8000,
         workers=4,
     )
