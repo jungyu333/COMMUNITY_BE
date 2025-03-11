@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  mysql-master:
+    image: mysql:8.0.33
+    container_name: community-master
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: community
+      MYSQL_DATABASE: community
+      MYSQL_USER: community
+      MYSQL_PASSWORD: community
+      TZ: "Asia/Seoul"
+    command: --server-id=1 --log-bin=mysql-bin --binlog-format=ROW
+    volumes:
+      - ./master-init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysqldb-master:/var/lib/mysql
+
+  mysql-slave:
+    image: mysql:8.0.33
+    container_name: community-slave
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: community
+      MYSQL_DATABASE: community
+      MYSQL_USER: community
+      MYSQL_PASSWORD: community
+      TZ: "Asia/Seoul"
+    command: --server-id=2 --relay-log=mysql-relay-bin
+    depends_on:
+      - mysql-master
+    volumes:
+      - ./slave-init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysqldb-slave:/var/lib/mysql
