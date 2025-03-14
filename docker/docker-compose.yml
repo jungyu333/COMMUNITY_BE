@@ -1,38 +1,38 @@
-version: "3.8"
+version: "3.3"
 
 services:
-  mysql-master:
-    image: mysql:8.0.33
-    container_name: community-master
+  community_master:
+    image: mariadb:10.6.3-focal
+    container_name: community_master
     restart: always
-    ports:
-      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: community
-      MYSQL_DATABASE: community
-      MYSQL_USER: community
-      MYSQL_PASSWORD: community
-      TZ: "Asia/Seoul"
-    command: --server-id=1 --log-bin=mysql-bin --binlog-format=ROW
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
     volumes:
-      - ./master-init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysqldb-master:/var/lib/mysql
+      - ./master/data:/var/lib/mysql
+      - ./master/config/:/etc/mysql/conf.d
+      - ./master/mysql-init-files/:/docker-entrypoint-initdb.d/
+    ports:
+      - "33306:3306"
+    secrets:
+      - mariadb_root_password
 
-  mysql-slave:
-    image: mysql:8.0.33
-    container_name: community-slave
+  community_slave:
+    image: mariadb:10.6.3-focal
+    container_name: community_slave
     restart: always
-    ports:
-      - "3307:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: community
-      MYSQL_DATABASE: community
-      MYSQL_USER: community
-      MYSQL_PASSWORD: community
-      TZ: "Asia/Seoul"
-    command: --server-id=2 --relay-log=mysql-relay-bin
-    depends_on:
-      - mysql-master
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
     volumes:
-      - ./slave-init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysqldb-slave:/var/lib/mysql
+      - ./slave/data:/var/lib/mysql
+      - ./slave/config/:/etc/mysql/conf.d
+      - ./slave/mysql-init-files/:/docker-entrypoint-initdb.d/
+    ports:
+      - "43306:3306"
+    secrets:
+      - mariadb_root_password
+    depends_on:
+      - community_master
+
+secrets:
+  mariadb_root_password:
+    file: ./mariadb_root_password.txt
