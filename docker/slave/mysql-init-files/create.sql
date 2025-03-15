@@ -1,9 +1,10 @@
-CREATE DATABASE community;
+CREATE DATABASE IF NOT EXISTS community;
 
-#create masteruser and grant privileges
-create user community@'%' identified by 'rootpassword';
+## Create Slave User
+CREATE USER 'community'@'%' IDENTIFIED BY 'rootpassword';
+GRANT ALL PRIVILEGES ON community.* TO 'community'@'%';
+GRANT REPLICATION SLAVE ON *.* TO 'community'@'%';
 
-grant all privileges on community.* to community@'%' identified by 'rootpassword';
 
-## flush
-flush privileges;
+## 적용
+FLUSH PRIVILEGES;

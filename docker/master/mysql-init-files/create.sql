@@ -1,10 +1,11 @@
 CREATE DATABASE community;
 
 ##create masteruser and grant privileges
-grant all privileges on community.* to community@'%' identified by 'rootpassword';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'rootpassword' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.21.0.1' IDENTIFIED BY 'rootpassword' WITH GRANT OPTION;
 
 #replication
 grant replication slave on *.* to 'community'@'%';
 
-## flushj
+## flush
 flush privileges;
