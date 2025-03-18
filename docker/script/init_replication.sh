@@ -1,12 +1,21 @@
 #!/bin/bash
 
 MASTER_IP="mysql-master"
+SLAVE_IP='mysql-slave'
 MYSQL_ROOT_PASSWORD="community"
 REPL_USER="replica_user"
 REPL_PASSWORD="replica123"
 
-echo "🚀 Master-Slave 복제 자동 설정 시작..."
+echo "🐳 Docker Run"
+docker-compose -f docker/docker-compose.yml -p community up -d
 
+echo "⏳ Wait MySQL Slave"
+while ! docker exec $SLAVE_IP mysqladmin -uroot -p$MYSQL_ROOT_PASSWORD ping -h127.0.0.1 --silent; do
+    echo "⏳ Slave Waiting"
+    sleep 2
+done
+
+echo "✅ MySQL Slave Ready"
 
 echo "🔧 Create Replica User"
 docker exec mysql-master mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "
