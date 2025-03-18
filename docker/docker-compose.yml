@@ -1,38 +1,44 @@
-version: "3.3"
+version: '3'
 
 services:
-  community_master:
-    image: mariadb:10.6.3-focal
-    container_name: community_master
+  master:
+    build: ./master
+    container_name: mysql-master
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
-    volumes:
-      - ./master/data:/var/lib/mysql
-      - ./master/config/:/etc/mysql/conf.d
-      - ./master/mysql-init-files/:/docker-entrypoint-initdb.d/
+      MYSQL_ROOT_PASSWORD: community
+      MYSQL_DATABASE: community
     ports:
       - "33306:3306"
-    secrets:
-      - mariadb_root_password
+    volumes:
+      - ./master/config/my.cnf:/etc/mysql/my.cnf
+      - master_data:/var/lib/mysql
+    networks:
+      - community-net
 
-  community_slave:
-    image: mariadb:10.6.3-focal
-    container_name: community_slave
+  slave:
+    build : ./slave
+    container_name: mysql-slave
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
-    volumes:
-      - ./slave/data:/var/lib/mysql
-      - ./slave/config/:/etc/mysql/conf.d
-      - ./slave/mysql-init-files/:/docker-entrypoint-initdb.d/
+      MYSQL_ROOT_PASSWORD: community
+      MYSQL_DATABASE: community
     ports:
-      - "43306:3306"
-    secrets:
-      - mariadb_root_password
+      - "33307:3306"
+    volumes:
+      - ./slave/config/my.cnf:/etc/mysql/my.cnf
+      - slave_data:/var/lib/mysql
     depends_on:
-      - community_master
+      - master
+    networks:
+      - community-net
 
-secrets:
-  mariadb_root_password:
-    file: ./mariadb_root_password.txt
+volumes:
+  master_data:
+  slave_data:
+
+networks:
+  community-net:
+    driver: bridge
+    external: true
+    name: master_community-net
