@@ -6,7 +6,7 @@ def main():
         app="app.server:app",
         host="localhost",
         port=8000,
-        workers=4,
+        workers=1,
     )
 
 
