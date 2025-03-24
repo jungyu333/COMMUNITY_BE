@@ -8,8 +8,7 @@ class Config(BaseSettings):
     APP_PORT: int = 8000
 
 
-class LocalConfig(Config):
-    ...
+class LocalConfig(Config): ...
 
 
 class ProductionConfig(Config):
