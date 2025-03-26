@@ -6,6 +6,16 @@ MYSQL_ROOT_PASSWORD="community"
 REPL_USER="replica_user"
 REPL_PASSWORD="replica123"
 
+NETWORK_NAME="master_community-net"
+
+echo "🌐 Check Docker Network"
+if ! docker network ls | grep -q "$NETWORK_NAME"; then
+    echo "🔧 Creating Docker Network: $NETWORK_NAME"
+    docker network create --driver bridge "$NETWORK_NAME"
+else
+    echo "✅ Network $NETWORK_NAME already exists"
+fi
+
 echo "🐳 Docker Run"
 docker-compose -f docker/docker-compose.yml -p community up -d
 
