@@ -1,3 +1,5 @@
+import os
+
 import click
 import uvicorn
 
@@ -18,6 +20,7 @@ from core.config import get_config
 )
 def main(env: str, debug: bool):
     config = get_config(env)
+    os.environ["ENV"] = env
 
     config.DEBUG = debug or config.DEBUG
 
