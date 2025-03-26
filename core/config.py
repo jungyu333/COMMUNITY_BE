@@ -22,11 +22,11 @@ class ProductionConfig(Config):
 
 
 def get_config(env: str | None = None) -> Config:
-    actual_env = env or os.environ.get("ENV", "local")
+    actual_env = env if env else os.environ.get("ENV", "local")
 
     config_type = {
         "local": LocalConfig,
         "prod": ProductionConfig,
     }
 
-    return config_type.get(actual_env if actual_env else "local", LocalConfig)()
+    return config_type.get(actual_env, LocalConfig)()
