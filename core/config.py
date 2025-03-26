@@ -6,6 +6,8 @@ class Config(BaseSettings):
     DEBUG: bool = True
     APP_HOST: str = "127.0.0.1"
     APP_PORT: int = 8000
+    WRITER_DB_URL: str = "mysql+aiomysql://root:community@localhost:33306/community"
+    READER_DB_URL: str = "mysql+aiomysql://root:community@localhost:33307/community"
 
 
 class LocalConfig(Config):
