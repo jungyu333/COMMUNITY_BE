@@ -1,3 +1,5 @@
+import os
+
 from pydantic_settings import BaseSettings
 
 
@@ -19,10 +21,12 @@ class ProductionConfig(Config):
     DEBUG: bool = False
 
 
-def get_config(env: str) -> Config:
+def get_config(env: str | None = None) -> Config:
+    actual_env = env or os.environ.get("ENV", "local")
+
     config_type = {
         "local": LocalConfig,
         "prod": ProductionConfig,
     }
 
-    return config_type.get(env, LocalConfig)()
+    return config_type.get(actual_env if actual_env else "local", LocalConfig)()
