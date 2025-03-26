@@ -1,6 +1,7 @@
-
 from functools import wraps
+
 from core.db import session
+
 
 class Transactional:
     def __call__(self, func):
@@ -14,6 +15,5 @@ class Transactional:
                 raise e
 
             return result
-
 
         return _transactional
