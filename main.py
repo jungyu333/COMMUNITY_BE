@@ -23,8 +23,8 @@ def main(env: str, debug: bool):
 
     uvicorn.run(
         app="app.server:app",
-        host="localhost",
-        port=8000,
+        host=config.APP_HOST,
+        port=config.APP_PORT,
         reload=True if config.ENV != "production" else False,
         workers=1,
     )
