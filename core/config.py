@@ -12,8 +12,7 @@ class Config(BaseSettings):
     READER_DB_URL: str = "mysql+aiomysql://root:community@localhost:33307/community"
 
 
-class LocalConfig(Config):
-    ...
+class LocalConfig(Config): ...
 
 
 class ProductionConfig(Config):
