@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from fastapi import Request, Response
 from pydantic import BaseModel, ConfigDict, Field
@@ -14,7 +13,7 @@ class ResponseInfo(BaseModel):
 
     headers: Headers | None = Field(None, title="Response headers")
     body: str = Field("", title="Response body")
-    status_code: Optional[int] = Field(default=None, title="Status code")
+    status_code: int | None = Field(default=None, title="Status code")
 
 
 class ResponseLogMiddleware(BaseHTTPMiddleware):
