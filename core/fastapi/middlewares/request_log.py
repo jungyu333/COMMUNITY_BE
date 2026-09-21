@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from fastapi import Request
 from nanoid import generate
@@ -15,7 +14,7 @@ class RequestInfo(BaseModel):
 
     method: str = Field(title="HTTP Method")
     url: str = Field(title="Request URL")
-    client: Optional[str] = Field(default=None, title="Client IP")
+    client: str | None = Field(default=None, title="Client IP")
     headers: Headers | None = Field(default=None, title="Request Headers")
     body: str = Field(default="", title="Request Body")
 
